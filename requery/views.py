@@ -43,7 +43,7 @@ def run_query(request, query_id):
         cursor.execute(text, params)
         lines = []
         for line in cursor.fetchall():
-            lines.append(list(line))
+            lines.append([unicode(tup)if not unicode(tup).isdigit() else tup for tup in line])
 
         if lines :
             response = {

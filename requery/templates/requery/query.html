@@ -20,20 +20,66 @@
 var aaaaa = null;
 
 function drawChart(data) {
-    var dadosBolados = [data.columns].concat(data.lines);
+    var dadosBolados = [data.columns].concat(data.chartlines);
 
     var dataChart = google.visualization.arrayToDataTable(dadosBolados);
 
     var options = {
-        title: 'Company Performance',
-        hAxis: {title: 'Year',  titleTextStyle: {color: '#333'}},
-        vAxis: {minValue: 0}
+        title: data.chart.title,
+        hAxis: {title: data.chart.hAxis,  titleTextStyle: {color: '#333'}},
+        vAxis: {title: data.chart.vAxis, minValue: 0}
     };
 
     var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
     chart.draw(dataChart, options);
 
 }
+
+function convert_to_unicode(data){
+    return data;
+};
+
+function convert_to_long(data){
+    return parseFloat(data);
+};
+
+function convert_to_Decimal(data){
+    return parseFloat(data);
+};
+
+function convert_to_Integer(data){
+    return parseFloat(data);
+};
+
+function printData(data) {
+    var loading_bar = django.jQuery('#loading_bar');
+    var run_button = django.jQuery('#id_run');
+    var result = django.jQuery('#result');
+    aaaaa = data;
+    var template = _.template(django.jQuery(data.template).html());
+    result.html(template(data));
+    run_button.attr("disabled", false);
+    loading_bar.fadeOut('slow');
+
+    var linha_para_chart = Array();
+
+    _.each(data.lines, function(registros){
+        linha = Array();
+        _.each(registros, function(coluna, index){
+            f_name = 'convert_to_' + data.datatypes[index];
+            linha.push(window[f_name](coluna));
+        });
+        linha_para_chart.push(linha);
+    });
+
+    data.chart.lines = linha_para_chart;
+    data.chart.title = 'titulo';
+    data.chart.vAxis = 'eixo x';
+
+    drawChart(data);
+
+};
+
 
 django.jQuery(function(){
     editor.setReadOnly(true);
@@ -50,12 +96,7 @@ django.jQuery(function(){
             dataType : 'json',
             data : django.jQuery("#run_form").serialize(),
             success : function(data){
-                aaaaa = data;
-                var template = _.template(django.jQuery(data.template).html());
-                result.html(template(data));
-                run_button.attr("disabled", false);
-                loading_bar.fadeOut('slow');
-                drawChart(data)
+                printData(data);
             },
             error : function(data){
                 var template = _.template(django.jQuery('#message-response').html());
@@ -177,11 +218,18 @@ django.jQuery(function(){
 <script type="text/template" id="table-response">
     <div class="row">
         <div class="col-lg-2">
-{#            <h2>Safari bug warning!</h2>#}
-{#            <div class="btn-group">#}
-                <button id="btn-tabela" onclick="btnTableChart()" class="btn btn-primary" autofocus="true">Tabela</button>
-                <button id="btn-grafico" onclick="btnTableChart()" class="btn btn-primary">Grafico</button>
-{#            </div>#}
+            <h2>Dimensoes</h2>
+            <% _.each(columns, function(column, index) { %>
+                <% if (["long", "integer", "Decimal"].indexOf(datatypes[index]) == -1) { %>
+                    <button id="btn-tabela" class="btn btn-primary"><%= column %></button>
+                <% }%>
+            <% }); %>
+            <h2>Metricas</h2>
+            <% _.each(columns, function(column, index) { %>
+                <% if (["long", "integer", "Decimal"].indexOf(datatypes[index]) != -1 ) { %>
+                    <button id="btn-tabela" class="btn btn-primary"><%= column %></button>
+                <% }%>
+            <% }); %>
         </div>
         <div class="col-lg-9">
             <h2>Resultado</h2>

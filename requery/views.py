@@ -56,7 +56,7 @@ def run_query(request, query_id):
                 'template' : '#table-response',
                 'columns' : columns,
                 'lines' : lines,
-                'types': data_types,
+                'datatypes': data_types,
             }
         else:
             response = {

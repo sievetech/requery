@@ -114,6 +114,29 @@ function f_loadData(data){
     $('.google-visualization-table-table').addClass('table')
 }
 
+
+var g_dimension;
+var g_measures = Array();
+
+function f_selectDimension(btn){
+    if (!_.isUndefined(g_dimension)){
+        $(g_dimension).removeClass('btn-danger').addClass('btn-primary');
+    }
+    $(btn).removeClass('btn-primary').addClass('btn-danger');
+    g_dimension = btn;
+};
+
+function f_selectMeasure(btn){
+    index = g_measures.indexOf(btn);
+    if(index == -1) {
+        $(btn).removeClass('btn-primary').addClass('btn-danger');
+        g_measures.push(btn);
+    }else{
+        $(btn).removeClass('btn-danger').addClass('btn-primary');
+        g_measures.splice(index,1);
+    }
+};
+
 function f_columnsDefinitions(data){
     var columnsDefinitions = { 'dimensions' : [], 'measures': []};
 
@@ -126,7 +149,6 @@ function f_columnsDefinitions(data){
     });
     return columnsDefinitions;
 };
-
 
 django.jQuery(function(){
     editor.setReadOnly(true);
@@ -268,15 +290,15 @@ django.jQuery(function(){
         <div class="col-lg-2">
             <h3>Dimensoes</h3>
             <% _.each(columns, function(column, index) { %>
-            <% if (["long", "integer", "Decimal", "int"].indexOf(datatypes[index]) == -1) { %>
-            <button id="btn-tabela" class="btn btn-block btn-primary"><%= column %></button>
-            <% }%>
+                <% if (["long", "integer", "Decimal", "int"].indexOf(datatypes[index]) == -1) { %>
+                    <button id="btn-tabela" onclick="f_selectDimension(this)" class="btn btn-block btn-primary"><%= column %></button>
+                <% }%>
             <% }); %>
             <h3>Metricas</h3>
             <% _.each(columns, function(column, index) { %>
-            <% if (["long", "integer", "Decimal", "int"].indexOf(datatypes[index]) != -1 ) { %>
-            <button id="btn-tabela" class="btn btn-block btn-primary"><%= column %></button>
-            <% }%>
+                <% if (["long", "integer", "Decimal", "int"].indexOf(datatypes[index]) != -1 ) { %>
+                    <button id="btn-tabela" onclick="f_selectMeasure(this)" class="btn btn-block btn-primary"><%= column %></button>
+                <% }%>
             <% }); %>
             <h3>Graficos</h3>
             <div>

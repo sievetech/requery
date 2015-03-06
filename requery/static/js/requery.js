@@ -16,3 +16,7 @@ function autoRun(){
         $('#id_run').click();
     }
 }
+
+function download(){
+    $('.table').tableExport({type:this.dataset.type,escape:'false'});
+}

@@ -18,7 +18,7 @@
 <script type="text/javascript">
 
 var aaaaa = null;
-var dataTable = null;
+var g_dataTable = null;
 
 function f_drawChart(chartType) {
 {#    var options = {#}
@@ -29,7 +29,7 @@ function f_drawChart(chartType) {
 
     chartObject = eval('google.visualization.'+chartType);
     var chart = new chartObject(document.getElementById('chart_div'));
-    chart.draw(dataTable);
+    chart.draw(g_dataTable);
     $('#chart_div').show();
     $('#mensagem').hide();
 };
@@ -80,7 +80,7 @@ function f_convertData(data) {
 }
 
 function f_running(data) {
-    aaaaa = data;
+    g_data = data;
     var loading_bar = django.jQuery('#loading_bar');
     var run_button = django.jQuery('#id_run');
     var result = django.jQuery('#result');
@@ -88,28 +88,27 @@ function f_running(data) {
     result.html(template(data));
     run_button.attr("disabled", false);
     loading_bar.fadeOut('slow');
-    f_loadData(data);
+    f_loadData();
 };
 
-function f_loadData(data){
-    var linha_para_chart = f_convertData(data);
-    var columnsDefinitions = f_columnsDefinitions(data);
+function f_loadData(){
+    var linha_para_chart = f_convertData(g_data);
+    var columnsDefinitions = f_columnsDefinitions(g_data);
 
-    data.chart = {};
-    data.chart.lines = [data.columns].concat(linha_para_chart);
-    data.chart.title = 'titulo';
-    data.chart.vAxis = 'eixo x';
+    g_data.chart = {};
+    g_data.chart.lines = [g_data.columns].concat(linha_para_chart);
+    g_data.chart.title = 'titulo';
+    g_data.chart.vAxis = 'eixo x';
 
-    dataTable = google.visualization.arrayToDataTable(data.chart.lines);
+    g_dataTable = google.visualization.arrayToDataTable(g_data.chart.lines);
     if (columnsDefinitions.dimensions.length == 1){
         f_drawChart('ColumnChart');
     }else{
         $('#mensagem').html("Escolha uma dimensão ao lado").show();
-
         $('#chart_div').hide();
     }
     var table = new google.visualization.Table(document.getElementById('table_div'));
-    table.draw(dataTable, {'showRowNumber': false, 'alternatingRowStyle': true, 'page': 'enable', 'pageSize': 10});
+    table.draw(g_dataTable, {'showRowNumber': false, 'alternatingRowStyle': true, 'page': 'enable', 'pageSize': 20});
     //Force table bootstrap in Google Table
     $('.google-visualization-table-table').addClass('table')
 }

@@ -88,7 +88,7 @@ function loadData(data) {
 
     dataTable = google.visualization.arrayToDataTable(data.chart.lines);
 
-    drawChart('BarChart');
+    drawChart('ColumnChart');
 
     var table = new google.visualization.Table(document.getElementById('table_div'));
     table.draw(dataTable, {'showRowNumber': false, 'alternatingRowStyle': true, 'page': 'enable', 'pageSize': 10});
@@ -235,30 +235,27 @@ django.jQuery(function(){
 
 <script type="text/template" id="table-response">
     <div class="row">
-        <div class="col-lg-2">
-            <h2>Dimensoes</h2>
+        <div class="col-lg-1">
+            <h3>Dimensoes</h3>
             <% _.each(columns, function(column, index) { %>
             <% if (["long", "integer", "Decimal"].indexOf(datatypes[index]) == -1) { %>
-            <button id="btn-tabela" class="btn btn-primary"><%= column %></button>
+            <button id="btn-tabela" class="btn btn-block btn-primary"><%= column %></button>
             <% }%>
             <% }); %>
-            <h2>Metricas</h2>
+            <h3>Metricas</h3>
             <% _.each(columns, function(column, index) { %>
             <% if (["long", "integer", "Decimal"].indexOf(datatypes[index]) != -1 ) { %>
-            <button id="btn-tabela" class="btn btn-primary"><%= column %></button>
+            <button id="btn-tabela" class="btn btn-block btn-primary"><%= column %></button>
             <% }%>
             <% }); %>
         </div>
-        <div class="col-lg-10">
-            <h2>Resultado</h2>
-
+        <div class="col-lg-11">
             <div class="col-lg-11">
                 <div id="chart_div" class="btn-block"></div>
                 <div id="table_div"></div>
             </div>
             <div class="col-lg-1">
                 <div>
-                    Escolha o gráfico:
                     <button onclick="drawChart('AreaChart');" id="btn-chart-column-bar" class="btn btn-block btn-primary">Area</button>
                     <button onclick="drawChart('BarChart');" id="btn-chart-bar" class="btn btn-block btn-primary">Barras</button>
                     <button onclick="drawChart('ColumnChart');" id="btn-chart-bar" class="btn btn-block btn-primary">Coluna</button>

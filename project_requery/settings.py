@@ -12,33 +12,15 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-BANCO_CAVEIRAO = {
-    'ENGINE': 'django.db.backends.mysql', 'PORT': '3306',
-    'USER': 'implantacao', 'PASSWORD': 'KTTYQea6', 'HOST': '192.168.1.105',
-}
-BASE_SIEVE = dict({'NAME' : 'sieve'}, **BANCO_CAVEIRAO)
-
-BANCO_ORACULO = {
-    'ENGINE': 'django.db.backends.postgresql_psycopg2',
-    'HOST': 'db0.sieve.com.br',
-    'USER': 'usr_jleite',
-    'PASSWORD': '******',
-    'OPTIONS': {'autocommit': True, }
-}
-
 DATABASES = {
-    'default': dict({'NAME' : 'django_control'}, **BANCO_CAVEIRAO),
-    'manager': dict({'NAME' : 'webetl_manager'}, **BANCO_CAVEIRAO),
-    'portal':BASE_SIEVE,
-    'api_portal':BASE_SIEVE,
-    'crm': BASE_SIEVE,
-    'operation': BASE_SIEVE,
-    'finance': BASE_SIEVE,
-    # 'matching': dict({'NAME' : 'matching_prod'}, **BANCO_CAVEIRAO),
-    'jobs': dict({'NAME' : 'sievejobs'}, **BANCO_CAVEIRAO),
-    'baseproduto': dict({'NAME' : 'baseproduto'}, **BANCO_CAVEIRAO),
-    'buscadescontos': dict({'NAME': 'buscadescontos'}, **BANCO_CAVEIRAO),
-    'matching': dict({'NAME': 'matching'}, **BANCO_ORACULO)
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'data.db',                      # Or path to database file if using sqlite3.
+        'USER': '',                      # Not used with sqlite3.
+        'PASSWORD': '',                  # Not used with sqlite3.
+        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
+        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+    }
 }
 
 # Local time zone for this installation. Choices can be found here:

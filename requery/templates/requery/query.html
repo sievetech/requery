@@ -12,6 +12,14 @@
 <script src="{{ STATIC_URL }}js/jquery-2.1.3.min.js"></script>
 <link href="{{ STATIC_URL }}css/bootstrap.min.css" rel="stylesheet">
 <script src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}MultiLevelPushMenu/css/normalize.css" />
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}font-awesome-4.3.0/css/font-awesome.css" />
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}MultiLevelPushMenu/css/demo.css" />
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}MultiLevelPushMenu/css/icons.css" />
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}MultiLevelPushMenu/css/component.css" />
+<script src="{{ STATIC_URL }}MultiLevelPushMenu/js/modernizr.custom.js"></script>
+<script src="{{ STATIC_URL }}MultiLevelPushMenu/js/classie.js"></script>
+<script src="{{ STATIC_URL }}MultiLevelPushMenu/js/mlpushmenu.js"></script>
 
 {{ media }}
 {% include 'requery/include_ace.html' %}
@@ -324,40 +332,67 @@ django.jQuery(function(){
 </script>
 
 <script type="text/template" id="table-response">
-    <div class="row">
-        <div class="col-lg-2">
-            <h3>Dimensoes</h3>
-            <% _.each(columns, function(column, index) { %>
-                <% if (["long", "integer", "Decimal", "int"].indexOf(datatypes[index]) == -1) { %>
-                    <button id="btn-tabela" onclick="f_selectDimension(this)" class="btn btn-block btn-primary"><%= column %></button>
-                <% }%>
-            <% }); %>
-            <h3>Metricas</h3>
-            <% _.each(columns, function(column, index) { %>
-                <% if (["long", "integer", "Decimal", "int"].indexOf(datatypes[index]) != -1 ) { %>
-                    <button id="btn-tabela" onclick="f_selectMeasure(this)" class="btn btn-block btn-primary"><%= column %></button>
-                <% }%>
-            <% }); %>
-            <h3>Graficos</h3>
-            <div>
-                <button onclick="f_drawChart('AreaChart');" id="btn-chart-column-bar" class="btn btn-block btn-primary">Area</button>
-                <button onclick="f_drawChart('BarChart');" id="btn-chart-bar" class="btn btn-block btn-primary">Barras</button>
-                <button onclick="f_drawChart('ColumnChart');" id="btn-chart-bar" class="btn btn-block btn-primary">Coluna</button>
-                <button onclick="f_drawChart('LineChart');" id="btn-chart-area" class="btn btn-block btn-primary">Linha</button>
-                <button onclick="f_drawChart('PieChart');" id="btn-chart-line" class="btn btn-block btn-primary">Pizza</button>
-                <button onclick="f_drawChart('SteppedAreaChart');" id="btn-chart-pie" class="btn btn-block btn-primary">Stepped</button>
-                <button onclick="f_drawChart('PieChart');" data-option="{'pieHole': 0.4}" id="btn-chart-donut" class="btn btn-block btn-primary">Dunot</button>
-                <button onclick="f_drawChart('Gauge');" id="btn-chart-gauge" class="btn btn-block btn-primary">Gauge</button>
-            </div>
-        </div>
-        <div class="col-lg-10">
-            <div id="mensagem" class="alert alert-warning" style="display: none" role="alert">
-                =D
-            </div>
-            <div id="chart_div" class="btn-block"></div>
-            <div id="table_div"></div>
-        </div>
-    </div>
+                <div class="mp-pusher" id="mp-pusher">
+                    <nav id="mp-menu" class="mp-menu">
+                        <div class="col-lg-2 mp-level">
+                            <ul>
+                                <li class="icon icon-arrow-left">
+                                    <a href="#"><i class="fa fa-2x fa-cubes"></i> Dimensões</a>
+                                        <div class="mp-level">
+                                            <h3>Dimensões</h3>
+                                            <a class="mp-back" href="#">back</a>
+                                            <ul>
+                                                <% _.each(columns, function(column, index) { %>
+                                                <% if (["long", "integer", "Decimal", "int"].indexOf(datatypes[index]) == -1) { %>
+                                                <li><button id="btn-tabela" onclick="f_selectDimension(this)" class="btn btn-primary"><%= column %></button></li>
+                                                <% }%>
+                                                <% }); %>
+                                            </ul>
+                                        </div>
+                                </li>
+                                <li class="icon icon-arrow-left">
+                                    <a href="#"><i class="fa fa-2x fa-cubes"></i> Métricas</a>
+                                    <div class="mp-level">
+                                        <h3>Metricas</h3>
+                                        <a class="mp-back" href="#">back</a>
+                                        <ul>
+                                            <% _.each(columns, function(column, index) { %>
+                                            <% if (["long", "integer", "Decimal", "int"].indexOf(datatypes[index]) != -1 ) { %>
+                                            <li><button id="btn-tabela" onclick="f_selectMeasure(this)" class="btn btn-primary"><%= column %></button></li>
+                                            <% }%>
+                                            <% }); %>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="icon icon-arrow-left">
+                                    <a href="#"><i class="fa fa-2x fa-trophy"></i> Graficos</a>
+                                    <div class="charts mp-level">
+                                        <h3>Graficos</h3>
+                                        <a class="mp-back" href="#">back</a>
+                                        <ul>
+                                            <li><i onclick="f_drawChart('AreaChart');"  id="btn-chart-colum-bar" class="fa fa-3x fa-area-chart"></i> Área</li>
+                                            <li><i onclick="f_drawChart('BarChart');"  id="btn-chart-bar" class="fa fa-3x fa-bar-chart"></i> Barra</li>
+                                            <li><i onclick="f_drawChart('ColumChart');"  id="btn-chart-bar" class="fa fa-3x fa-bar-chart"></i> Colunas</li>
+                                            <li><i onclick="f_drawChart('LineChart');" id="btn-chart-area" class="fa fa-3x fa-line-chart"></i> Linha</li>
+                                            <li><i onclick="f_drawChart('PieChart');" id="btn-chart-line" class="fa fa-3x fa-pie-chart"></i> Pizza</li>
+                                            <li><i onclick="f_drawChart('SteppedAreaChart');" id="btn-chart-pie" class="fa fa-3x fa-bar-chart"></i> Coluna com Área</li>
+                                            <li><i onclick="f_drawChart('PieChart');" data-option="{'pieHole': 0.4}" id="btn-chart-donut" class="fa fa-3x fa-pie-chart"></i> Rosquinha</li>
+                                            <li><i onclick="f_drawChart('Gauge');" id="btn-chart-gauge" class="fa fa-3x fa-dashboard"></i> Bitola</li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </nav>
+                    <div class="col-lg-10">
+                        <p><a href="#" id="trigger" onclick="function menuToggle() {new mlPushMenu( document.getElementById( 'mp-menu' ), document.getElementById( 'trigger' ));} menuToggle()"> <i class="fa fa-2x fa-gear"> Abrir Menu</i></a></p>
+                        <div id="mensagem" class="alert alert-warning" style="display: none" role="alert">
+                            =D
+                        </div>
+                        <div id="chart_div" class="btn-block"></div>
+                        <div id="table_div"></div>
+                    </div>
+                        </div>
 </script>
 
     <script>

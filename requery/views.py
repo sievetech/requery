@@ -43,7 +43,12 @@ def run_query(request, query_id):
         cursor.execute(text, params)
         lines = []
         for line in cursor.fetchall():
-            lines.append([unicode(tup)if not unicode(tup).isdigit() else tup for tup in line])
+            last_line = line
+            lines.append([unicode(tup) for tup in line])
+
+        data_types = []
+        for item in last_line:
+            data_types.append(item.__class__.__name__)
 
         if lines :
             columns = [col[0] for col in cursor.description]
@@ -51,7 +56,7 @@ def run_query(request, query_id):
                 'template' : '#table-response',
                 'columns' : columns,
                 'lines' : lines,
-                'types': {col:type(line[i]) for i, col in enumerate(columns)}
+                'types': data_types,
             }
         else:
             response = {

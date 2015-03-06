@@ -46,10 +46,12 @@ def run_query(request, query_id):
             lines.append([unicode(tup)if not unicode(tup).isdigit() else tup for tup in line])
 
         if lines :
+            columns = [col[0] for col in cursor.description]
             response = {
                 'template' : '#table-response',
-                'columns' : [col[0] for col in cursor.description],
-                'lines' : lines
+                'columns' : columns,
+                'lines' : lines,
+                'types': {col:type(line[i]) for i, col in enumarate(columns)}
             }
         else:
             response = {

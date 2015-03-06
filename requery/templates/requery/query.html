@@ -235,7 +235,7 @@ django.jQuery(function(){
 
 <script type="text/template" id="table-response">
     <div class="row">
-        <div class="col-lg-1">
+        <div class="col-lg-2">
             <h3>Dimensoes</h3>
             <% _.each(columns, function(column, index) { %>
             <% if (["long", "integer", "Decimal"].indexOf(datatypes[index]) == -1) { %>
@@ -248,24 +248,21 @@ django.jQuery(function(){
             <button id="btn-tabela" class="btn btn-block btn-primary"><%= column %></button>
             <% }%>
             <% }); %>
+            <h3>Graficos</h3>
+            <div>
+                <button onclick="drawChart('AreaChart');" id="btn-chart-column-bar" class="btn btn-block btn-primary">Area</button>
+                <button onclick="drawChart('BarChart');" id="btn-chart-bar" class="btn btn-block btn-primary">Barras</button>
+                <button onclick="drawChart('ColumnChart');" id="btn-chart-bar" class="btn btn-block btn-primary">Coluna</button>
+                <button onclick="drawChart('LineChart');" id="btn-chart-area" class="btn btn-block btn-primary">Linha</button>
+                <button onclick="drawChart('PieChart');" id="btn-chart-line" class="btn btn-block btn-primary">Pizza</button>
+                <button onclick="drawChart('SteppedAreaChart');" id="btn-chart-pie" class="btn btn-block btn-primary">Stepped</button>
+                <button onclick="drawChart('PieChart');" data-option="{'pieHole': 0.4}" id="btn-chart-donut" class="btn btn-block btn-primary">Dunot</button>
+                <button onclick="drawChart('Gauge');" id="btn-chart-gauge" class="btn btn-block btn-primary">Gauge</button>
+            </div>
         </div>
-        <div class="col-lg-11">
-            <div class="col-lg-11">
-                <div id="chart_div" class="btn-block"></div>
-                <div id="table_div"></div>
-            </div>
-            <div class="col-lg-1">
-                <div>
-                    <button onclick="drawChart('AreaChart');" id="btn-chart-column-bar" class="btn btn-block btn-primary">Area</button>
-                    <button onclick="drawChart('BarChart');" id="btn-chart-bar" class="btn btn-block btn-primary">Barras</button>
-                    <button onclick="drawChart('ColumnChart');" id="btn-chart-bar" class="btn btn-block btn-primary">Coluna</button>
-                    <button onclick="drawChart('LineChart');" id="btn-chart-area" class="btn btn-block btn-primary">Linha</button>
-                    <button onclick="drawChart('PieChart');" id="btn-chart-line" class="btn btn-block btn-primary">Pizza</button>
-                    <button onclick="drawChart('SteppedAreaChart');" id="btn-chart-pie" class="btn btn-block btn-primary">Stepped</button>
-                    <button onclick="drawChart('PieChart');" data-option="{'pieHole': 0.4}" id="btn-chart-donut" class="btn btn-block btn-primary">Dunot</button>
-                    <button onclick="drawChart('Gauge');" id="btn-chart-gauge" class="btn btn-block btn-primary">Gauge</button>
-                </div>
-            </div>
+        <div class="col-lg-10">
+            <div id="chart_div" class="btn-block"></div>
+            <div id="table_div"></div>
         </div>
     </div>
 </script>

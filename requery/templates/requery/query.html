@@ -46,6 +46,15 @@ function f_drawChart(chartType) {
 {#        vAxis: {title: chartOptions.vAxis, minValue: 0}#}
 {#    };#}
 
+    var options = {};
+
+    if (chartType == "Rosquinha"){
+        chartType = "PieChart";
+        options = {'pieHole': 0.4};
+    }else{
+        options = {vAxis: {minValue: 0}};
+    }
+
     chartObject = eval('google.visualization.'+chartType);
     var chart = new chartObject(document.getElementById('chart_div'));
     chart.draw(g_dataTable);
@@ -394,14 +403,14 @@ django.jQuery(function(){
                                         <h3>Graficos</h3>
                                         <a class="mp-back" href="#">back</a>
                                         <ul>
-                                            <li><i onclick="f_drawChart('AreaChart');"  id="btn-chart-colum-bar" class="fa fa-3x fa-area-chart"></i> Área</li>
-                                            <li><i onclick="f_drawChart('BarChart');"  id="btn-chart-bar" class="fa fa-3x fa-bar-chart"></i> Barra</li>
-                                            <li><i onclick="f_drawChart('ColumChart');"  id="btn-chart-bar" class="fa fa-3x fa-bar-chart"></i> Colunas</li>
-                                            <li><i onclick="f_drawChart('LineChart');" id="btn-chart-area" class="fa fa-3x fa-line-chart"></i> Linha</li>
-                                            <li><i onclick="f_drawChart('PieChart');" id="btn-chart-line" class="fa fa-3x fa-pie-chart"></i> Pizza</li>
-                                            <li><i onclick="f_drawChart('SteppedAreaChart');" id="btn-chart-pie" class="fa fa-3x fa-bar-chart"></i> Coluna com Área</li>
-                                            <li><i onclick="f_drawChart('PieChart');" data-option="{'pieHole': 0.4}" id="btn-chart-donut" class="fa fa-3x fa-pie-chart"></i> Rosquinha</li>
-                                            <li><i onclick="f_drawChart('Gauge');" id="btn-chart-gauge" class="fa fa-3x fa-dashboard"></i> Bitola</li>
+                                            <li><i onclick="f_drawChart('AreaChart');"  id="btn-chart-colum-bar" class="fa fa-3x fa-area-chart">Área</i> </li>
+                                            <li><i onclick="f_drawChart('BarChart');"  id="btn-chart-bar" class="fa fa-3x fa-bar-chart">Barra</i> </li>
+                                            <li><i onclick="f_drawChart('ColumnChart');"  id="btn-chart-bar" class="fa fa-3x fa-bar-chart">Colunas</i> </li>
+                                            <li><i onclick="f_drawChart('LineChart');" id="btn-chart-area" class="fa fa-3x fa-line-chart">Linha</i> </li>
+                                            <li><i onclick="f_drawChart('PieChart');" id="btn-chart-line" class="fa fa-3x fa-pie-chart">Pizza</i> </li>
+                                            <li><i onclick="f_drawChart('SteppedAreaChart');" id="btn-chart-pie" class="fa fa-3x fa-bar-chart">Coluna como Área</i></li>
+                                            <li><i onclick="f_drawChart('Rosquinha');" id="btn-chart-donut" class="fa fa-3x fa-pie-chart">Rosquinha</i> </li>
+                                            <li><i onclick="f_drawChart('Gauge');" id="btn-chart-gauge" class="fa fa-3x fa-dashboard">Gauge</i> </li>
                                         </ul>
                                     </div>
                                 </li>

@@ -12,16 +12,181 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
+# BANCO_CAVEIRAO = {
+#     'ENGINE': 'django.db.backends.mysql', 'PORT': '3306',
+#     'USER': 'implantacao', 'PASSWORD': 'KTTYQea6', 'HOST': '192.168.1.105',
+# }
+# BASE_SIEVE = dict({'NAME' : 'sieve'}, **BANCO_CAVEIRAO)
+#
+# BANCO_ORACULO = {
+#     'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#     'HOST': 'db0.sieve.com.br',
+#     'USER': 'usr_jleite',
+#     'PASSWORD': 'sievera',
+#     'OPTIONS': {'autocommit': True, }
+# }
+#
+# DATABASES = {
+#     'default': dict({'NAME' : 'django_control'}, **BANCO_CAVEIRAO),
+#     'manager': dict({'NAME' : 'webetl_manager'}, **BANCO_CAVEIRAO),
+#     'portal':BASE_SIEVE,
+#     'api_portal':BASE_SIEVE,
+#     'crm': BASE_SIEVE,
+#     'operation': BASE_SIEVE,
+#     'finance': BASE_SIEVE,
+#     # 'matching': dict({'NAME' : 'matching_prod'}, **BANCO_CAVEIRAO),
+#     'jobs': dict({'NAME' : 'sievejobs'}, **BANCO_CAVEIRAO),
+#     'baseproduto': dict({'NAME' : 'baseproduto'}, **BANCO_CAVEIRAO),
+#     'buscadescontos': dict({'NAME': 'buscadescontos'}, **BANCO_CAVEIRAO),
+#     'matching': dict({'NAME': 'matching'}, **BANCO_ORACULO)
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'data.db',                      # Or path to database file if using sqlite3.
-        'USER': '',                      # Not used with sqlite3.
-        'PASSWORD': '',                  # Not used with sqlite3.
-        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
+        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'django_control',                      # Or path to database file if using sqlite3.
+        'USER': 'sievedb',                      # Not used with sqlite3.
+        'PASSWORD': '93849sieve',                  # Not used with sqlite3.
+        'HOST': '208.101.8.67',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
-    }
+    },
+    'helpdesk': {
+        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': "sieve",
+        'USER': "django_prod",
+        'PASSWORD': "vzmwZrY7",
+        'HOST': "dumbo.sieve.com.br",
+        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+    },
+    'manager': {
+        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'webetl_manager',                      # Or path to database file if using sqlite3.
+        'USER': 'django',                      # Not used with sqlite3.
+        'PASSWORD': 'XR762OQ=',                  # Not used with sqlite3.
+        'HOST': 'webetlmanager.sieve.com.br',                      # Set to empty string for localhost. Not used with sqlite3.
+        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+    },
+    'portal': {
+        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': "sieve",
+        'USER': "django_prod",
+        'PASSWORD': "vzmwZrY7",
+        'HOST': "dumbo.sieve.com.br",
+        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+    },
+    'portal_slave': {
+        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'sieve',                      # Or path to database file if using sqlite3.
+        'USER': 'django_prod',                      # Not used with sqlite3.
+        'PASSWORD': 'vzmwZrY7',                  # Not used with sqlite3.
+        'HOST': 'dumbo.slave.sieve.com.br',                      # Set to empty string for localhost. Not used with sqlite3.
+        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+    },
+    'finance': {
+        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': "sieve",
+        'USER': "django_prod",
+        'PASSWORD': "vzmwZrY7",
+        'HOST': "dumbo.sieve.com.br",
+        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+    },
+    'api_portal': {
+        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': "sieve",
+        'USER': "django_prod",
+        'PASSWORD': "vzmwZrY7",
+        'HOST': "dumbo.sieve.com.br",
+        'PORT': '',
+    },
+    'crm': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': "sieve",
+        'USER': "django_prod",
+        'PASSWORD': "vzmwZrY7",
+        'HOST': "dumbo.sieve.com.br",
+        'PORT': '',
+    },
+    'operation': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': "sieve",
+        'USER': "django_prod",
+        'PASSWORD': "vzmwZrY7",
+        'HOST': "dumbo.sieve.com.br",
+        'PORT': '',
+    },
+    'old_jobs': {
+        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'sievejobs',                      # Or path to database file if using sqlite3.
+        'USER': 'sievedb',                      # Not used with sqlite3.
+        'PASSWORD': '93849sieve',                  # Not used with sqlite3.
+        'HOST': 'jetranger.sieve.com.br',                      # Set to empty string for localhost. Not used with sqlite3.
+        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+    },
+    'minuano': {
+        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'minuano',                      # Or path to database file if using sqlite3.
+        'USER': 'sievedb',                      # Not used with sqlite3.
+        'PASSWORD': '93849sieve',                  # Not used with sqlite3.
+        'HOST': 'jetranger.sieve.com.br',                      # Set to empty string for localhost. Not used with sqlite3.
+        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+    },
+    'jobs': {
+        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': "sievejobs",
+        'USER': "django",
+        'PASSWORD': "Hlr7ZA",
+        'HOST': "dumbo.jobs.webetl.com.br",
+        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+    },
+    'baseproduto': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'baseproduto',
+            'USER': 'django',
+            'PASSWORD': 'XR762OQ=',
+            'HOST': '173.193.20.243',
+            'PORT': '',
+    },
+    'bi_pentaho': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'pentaho_repository',
+            'USER': 'django',
+            'PASSWORD': '7sCzcazY',
+            'HOST': 'bi.sieve.com.br',
+            'PORT': '',
+    },
+    'bi_cubo': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'bi_dm1',
+            'USER': 'django',
+            'PASSWORD': '7sCzcazY',
+            'HOST': 'bi.sieve.com.br',
+            'PORT': '',
+    },
+    'zendesk': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'zendesk',
+            'USER': 'django',
+            'PASSWORD': '7sCzcazY',
+            'HOST': 'bi.sieve.com.br',
+            'PORT': '',
+    },
+    'oraculo': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'oraculo',
+            'USER': 'django',
+            'PASSWORD': 'XR762OQ=',
+            'HOST': 'oraculo.sieve.com.br',
+            'PORT': '',
+    },
+    'matching': {
+        'NAME': 'matching',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'HOST': "dumbo.oraculo.sieve.com.br",
+        'USER': 'matching',
+        'PASSWORD': '#dev@sieve5',
+    },
 }
+
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name

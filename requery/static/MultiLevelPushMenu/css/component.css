@@ -146,9 +146,11 @@ html, body, .container, .scroller {
 
 /* cover */
 .mp-cover .mp-level.mp-level-open {
-	-webkit-transform: translate3d(0, 0, 0);
-	-moz-transform: translate3d(0, 0, 0);
-	transform: translate3d(0, 0, 0);
+    -webkit-transform: translate3d(0, 0, 0);
+    -moz-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    min-height: 400px;
+    z-index: 9999;
 }
 
 .mp-cover .mp-level.mp-level-open > ul > li > .mp-level:not(.mp-level-open) {

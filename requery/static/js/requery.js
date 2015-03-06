@@ -18,5 +18,8 @@ function autoRun(){
 }
 
 function download(){
-    $('.table').tableExport({type:this.dataset.type,escape:'false'});
+    var download = $('#table_to_download_div');
+    download.show();
+    download.find('.table').tableExport({type:this.dataset.type,escape:'false'});
+    download.hide();
 }

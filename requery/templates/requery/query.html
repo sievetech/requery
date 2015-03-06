@@ -122,7 +122,10 @@ function f_loadData(){
         $('#chart_div').hide();
     }
     var table = new google.visualization.Table(document.getElementById('table_div'));
+    var table_to_download = new google.visualization.Table(document.getElementById('table_to_download_div'));
+
     table.draw(g_dataTable, {'showRowNumber': false, 'alternatingRowStyle': true, 'page': 'enable', 'pageSize': 20});
+    table_to_download.draw(g_dataTable, {'showRowNumber': false, 'alternatingRowStyle': true,});
     //Force table bootstrap in Google Table
     $('.google-visualization-table-table').addClass('table')
 }
@@ -192,7 +195,10 @@ function f_filterData(){
     f_drawChart('ColumnChart');
 
     var table = new google.visualization.Table(document.getElementById('table_div'));
+    var table_to_download_div = new google.visualization.Table(document.getElementById('table_to_download_div'));
+
     table.draw(g_dataTable, {'showRowNumber': false, 'alternatingRowStyle': true, 'page': 'enable', 'pageSize': 20});
+    table_to_download_div.draw(g_dataTable, {'showRowNumber': false, 'alternatingRowStyle': true});
     //Force table bootstrap in Google Table
     $('.google-visualization-table-table').addClass('table');
 
@@ -374,6 +380,7 @@ django.jQuery(function(){
             </div>
             <div id="chart_div" class="btn-block"></div>
             <div id="table_div"></div>
+            <div id="table_to_download_div" style="display: None;"></div>
         </div>
     </div>
 </script>
@@ -385,6 +392,7 @@ django.jQuery(function(){
     function btnTableChart(){
         $('#chart_div').toggle();
         $('#table_div').toggle();
+        $('#table_to_download_div').toggle();
     };
 
     </script>

@@ -6,7 +6,8 @@
 {% block extrahead %}{{ block.super }}
 {% url 'admin:jsi18n' as jsi18nurl %}
 <script type="text/javascript" src="{{ jsi18nurl|default:"../../../jsi18n/" }}"></script>
-<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.3.3/underscore-min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/underscore-min.1.3.3.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/requery.js"></script>
 <script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization','version':'1.1','packages':['corechart', 'table', 'gauge', ]}]}"></script>
 
 <script src="{{ STATIC_URL }}js/jquery-2.1.3.min.js"></script>
@@ -20,6 +21,16 @@
 <script src="{{ STATIC_URL }}MultiLevelPushMenu/js/modernizr.custom.js"></script>
 <script src="{{ STATIC_URL }}MultiLevelPushMenu/js/classie.js"></script>
 <script src="{{ STATIC_URL }}MultiLevelPushMenu/js/mlpushmenu.js"></script>
+
+
+<script type="text/javascript" src="{{ STATIC_URL }}js/kayalshri-tableExport/tableExport.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/kayalshri-tableExport/jquery.base64.js"></script>
+
+<script type="text/javascript" src="{{ STATIC_URL }}js/kayalshri-tableExport/html2canvas.js"></script>
+
+<script type="text/javascript" src="{{ STATIC_URL }}js/kayalshri-tableExport/jspdf/libs/sprintf.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/kayalshri-tableExport/jspdf/jspdf.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/kayalshri-tableExport/jspdf/libs/base64.js"></script>
 
 {{ media }}
 {% include 'requery/include_ace.html' %}
@@ -119,7 +130,10 @@ function f_loadData(){
         $('#chart_div').hide();
     }
     var table = new google.visualization.Table(document.getElementById('table_div'));
+    var table_to_download = new google.visualization.Table(document.getElementById('table_to_download_div'));
+
     table.draw(g_dataTable, {'showRowNumber': false, 'alternatingRowStyle': true, 'page': 'enable', 'pageSize': 20});
+    table_to_download.draw(g_dataTable, {'showRowNumber': false, 'alternatingRowStyle': true,});
     //Force table bootstrap in Google Table
     $('.google-visualization-table-table').addClass('table')
 }
@@ -189,7 +203,10 @@ function f_filterData(){
     f_drawChart('ColumnChart');
 
     var table = new google.visualization.Table(document.getElementById('table_div'));
+    var table_to_download_div = new google.visualization.Table(document.getElementById('table_to_download_div'));
+
     table.draw(g_dataTable, {'showRowNumber': false, 'alternatingRowStyle': true, 'page': 'enable', 'pageSize': 20});
+    table_to_download_div.draw(g_dataTable, {'showRowNumber': false, 'alternatingRowStyle': true});
     //Force table bootstrap in Google Table
     $('.google-visualization-table-table').addClass('table');
 
@@ -212,6 +229,7 @@ django.jQuery(function(){
             data : django.jQuery("#run_form").serialize(),
             success : function(data){
                 f_running(data);
+                django.jQuery('.download').removeAttr('disabled');
             },
             error : function(data){
                 console.log(data)
@@ -223,6 +241,9 @@ django.jQuery(function(){
         });
         return false;
     });
+    useUrlParams();
+    autoRun();
+    $('.download').click(download);
 });
 </script>
 <style type="text/css">
@@ -311,6 +332,9 @@ django.jQuery(function(){
         <div class="submit-row">
             <img id="loading_bar" style="display:none" src="{{ STATIC_URL }}requery/ajax-loader.gif">
             <input id="id_run" type="submit" value="Run" class="default" name="run">
+            <input type="button" value="CSV" class="default download" name="CSV" data-type="csv" disabled="disabled">
+            <input type="button" value="XML" class="default download" name="XML" data-type="xml" disabled="disabled">
+            <input type="button" value="json" class="default download" name="json" data-type="json" disabled="disabled">
         </div>
     {% endblock %}
 {% endif %}
@@ -391,6 +415,7 @@ django.jQuery(function(){
                         </div>
                         <div id="chart_div" class="btn-block"></div>
                         <div id="table_div"></div>
+                        <div id="table_to_download_div" style="display: None;"></div>
                     </div>
                         </div>
 </script>
@@ -402,6 +427,7 @@ django.jQuery(function(){
     function btnTableChart(){
         $('#chart_div').toggle();
         $('#table_div').toggle();
+        $('#table_to_download_div').toggle();
     };
 
     </script>

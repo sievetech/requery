@@ -6,6 +6,13 @@ function useUrlParams() {
     data = {};
     _.each(params, function (param) {
         var values = param.split('=');
+        data[values[0]] = values[1];
         $('[name="' + values[0] + '"]').val(values[1]);
     });
+}
+
+function autoRun(){
+    if(data.force && data.force.toLowerCase() == 'true') {
+        $('#id_run').click();
+    }
 }

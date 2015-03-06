@@ -67,12 +67,15 @@ function f_convertData(data) {
     _.each(data.lines, function (registros) {
         linha = Array();
         _.each(registros, function (coluna, index) {
-            f_name = 'convert_to_' + data.datatypes[index];
-            if (_.isUndefined(window[f_name])) {
-                console.log(f_name + ' not implemented');
-                f_name = 'convert_to_default';
+            // Verifica se existe a coluna no filtro
+            if(g_columns_in_chart.indexOf(data.columns[index]) != -1){
+                f_name = 'convert_to_' + data.datatypes[index];
+                if (_.isUndefined(window[f_name])) {
+                    console.log(f_name + ' not implemented');
+                    f_name = 'convert_to_default';
+                }
+                linha.push(window[f_name](coluna));
             }
-            linha.push(window[f_name](coluna));
         });
         linha_para_chart.push(linha);
     });
@@ -92,8 +95,8 @@ function f_running(data) {
 };
 
 function f_loadData(){
-    var linha_para_chart = f_convertData(g_data);
     var columnsDefinitions = f_columnsDefinitions(g_data);
+    var linha_para_chart = f_convertData(g_data);
 
     g_data.chart = {};
     g_data.chart.lines = [g_data.columns].concat(linha_para_chart);
@@ -116,6 +119,8 @@ function f_loadData(){
 
 var g_dimension;
 var g_measures = Array();
+var g_columns_in_chart = Array();
+
 
 function f_selectDimension(btn){
     if (!_.isUndefined(g_dimension)){
@@ -140,6 +145,7 @@ function f_selectMeasure(btn){
 
 function f_columnsDefinitions(data){
     g_columnsDefinitions = { 'dimensions' : [], 'measures': []};
+    g_columns_in_chart = Array();
 
     _.each(data.columns, function(column, index) {
         if (["long", "integer", "Decimal", "int"].indexOf(data.datatypes[index]) == -1){
@@ -147,11 +153,10 @@ function f_columnsDefinitions(data){
         }else{
             g_columnsDefinitions.measures.push(column);
         }
+        g_columns_in_chart.push(column);
     });
     return g_columnsDefinitions;
 };
-
-var g_columns_in_chart;
 
 function f_filterData(){
     g_columns_in_chart = Array();
@@ -165,6 +170,22 @@ function f_filterData(){
             g_columns_in_chart.push($(measure).text());
         });
     }
+    debugger;
+    var linha_para_chart = f_convertData(g_data);
+
+    g_data.chart = {};
+    g_data.chart.lines = [g_columns_in_chart].concat(linha_para_chart);
+    g_data.chart.title = 'titulo';
+    g_data.chart.vAxis = 'eixo x';
+
+    g_dataTable = google.visualization.arrayToDataTable(g_data.chart.lines);
+    f_drawChart('ColumnChart');
+
+    var table = new google.visualization.Table(document.getElementById('table_div'));
+    table.draw(g_dataTable, {'showRowNumber': false, 'alternatingRowStyle': true, 'page': 'enable', 'pageSize': 20});
+    //Force table bootstrap in Google Table
+    $('.google-visualization-table-table').addClass('table');
+
 }
 
 

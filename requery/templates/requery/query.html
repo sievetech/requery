@@ -123,6 +123,7 @@ function f_selectDimension(btn){
     }
     $(btn).removeClass('btn-primary').addClass('btn-danger');
     g_dimension = btn;
+    f_filterData();
 };
 
 function f_selectMeasure(btn){
@@ -134,20 +135,38 @@ function f_selectMeasure(btn){
         $(btn).removeClass('btn-danger').addClass('btn-primary');
         g_measures.splice(index,1);
     }
+    f_filterData();
 };
 
 function f_columnsDefinitions(data){
-    var columnsDefinitions = { 'dimensions' : [], 'measures': []};
+    g_columnsDefinitions = { 'dimensions' : [], 'measures': []};
 
     _.each(data.columns, function(column, index) {
         if (["long", "integer", "Decimal", "int"].indexOf(data.datatypes[index]) == -1){
-            columnsDefinitions.dimensions.push(column);
+            g_columnsDefinitions.dimensions.push(column);
         }else{
-            columnsDefinitions.measures.push(column);
+            g_columnsDefinitions.measures.push(column);
         }
     });
-    return columnsDefinitions;
+    return g_columnsDefinitions;
 };
+
+var g_columns_in_chart;
+
+function f_filterData(){
+    g_columns_in_chart = Array();
+    g_columns_in_chart.push($(g_dimension).text());
+    if (g_measures.length == 0){
+        _.each(g_columnsDefinitions.measures, function(measure){
+            g_columns_in_chart.push(measure);
+        });
+    }else{
+        _.each(g_measures, function(measure){
+            g_columns_in_chart.push($(measure).text());
+        });
+    }
+}
+
 
 django.jQuery(function(){
     editor.setReadOnly(true);

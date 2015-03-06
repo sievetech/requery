@@ -20,7 +20,7 @@
 var aaaaa = null;
 var dataTable = null;
 
-function drawChart(chartType) {
+function f_drawChart(chartType) {
 {#    var options = {#}
 {#        title: chartOptions.title,#}
 {#        hAxis: {title: chartOptions.hAxis,  titleTextStyle: {color: '#333'}},#}
@@ -30,6 +30,8 @@ function drawChart(chartType) {
     chartObject = eval('google.visualization.'+chartType);
     var chart = new chartObject(document.getElementById('chart_div'));
     chart.draw(dataTable);
+    $('#chart_div').show();
+    $('#mensagem').hide();
 };
 
 function convert_to_unicode(data){
@@ -56,7 +58,28 @@ function convert_to_default(data){
     return data;
 };
 
-function loadData(data) {
+function convert_to_int(data){
+    return parseInt(data);
+};
+
+function f_convertData(data) {
+    var linha_para_chart = Array();
+    _.each(data.lines, function (registros) {
+        linha = Array();
+        _.each(registros, function (coluna, index) {
+            f_name = 'convert_to_' + data.datatypes[index];
+            if (_.isUndefined(window[f_name])) {
+                console.log(f_name + ' not implemented');
+                f_name = 'convert_to_default';
+            }
+            linha.push(window[f_name](coluna));
+        });
+        linha_para_chart.push(linha);
+    });
+    return linha_para_chart;
+}
+
+function f_running(data) {
     aaaaa = data;
     var loading_bar = django.jQuery('#loading_bar');
     var run_button = django.jQuery('#id_run');
@@ -65,21 +88,12 @@ function loadData(data) {
     result.html(template(data));
     run_button.attr("disabled", false);
     loading_bar.fadeOut('slow');
+    f_loadData(data);
+};
 
-    var linha_para_chart = Array();
-
-    _.each(data.lines, function(registros){
-        linha = Array();
-        _.each(registros, function(coluna, index){
-            f_name = 'convert_to_' + data.datatypes[index];
-            if (_.isUndefined(window[f_name])){
-                console.log(f_name+' not implemented');
-                f_name = 'convert_to_default';
-            }
-            linha.push(window[f_name](coluna));
-        });
-        linha_para_chart.push(linha);
-    });
+function f_loadData(data){
+    var linha_para_chart = f_convertData(data);
+    var columnsDefinitions = f_columnsDefinitions(data);
 
     data.chart = {};
     data.chart.lines = [data.columns].concat(linha_para_chart);
@@ -87,14 +101,30 @@ function loadData(data) {
     data.chart.vAxis = 'eixo x';
 
     dataTable = google.visualization.arrayToDataTable(data.chart.lines);
+    if (columnsDefinitions.dimensions.length == 1){
+        f_drawChart('ColumnChart');
+    }else{
+        $('#mensagem').html("Escolha uma dimensão ao lado").show();
 
-    drawChart('ColumnChart');
-
+        $('#chart_div').hide();
+    }
     var table = new google.visualization.Table(document.getElementById('table_div'));
     table.draw(dataTable, {'showRowNumber': false, 'alternatingRowStyle': true, 'page': 'enable', 'pageSize': 10});
     //Force table bootstrap in Google Table
     $('.google-visualization-table-table').addClass('table')
+}
 
+function f_columnsDefinitions(data){
+    var columnsDefinitions = { 'dimensions' : [], 'measures': []};
+
+    _.each(data.columns, function(column, index) {
+        if (["long", "integer", "Decimal", "int"].indexOf(data.datatypes[index]) == -1){
+            columnsDefinitions.dimensions.push(column);
+        }else{
+            columnsDefinitions.measures.push(column);
+        }
+    });
+    return columnsDefinitions;
 };
 
 
@@ -113,7 +143,7 @@ django.jQuery(function(){
             dataType : 'json',
             data : django.jQuery("#run_form").serialize(),
             success : function(data){
-                loadData(data);
+                f_running(data);
             },
             error : function(data){
                 console.log(data)
@@ -238,29 +268,32 @@ django.jQuery(function(){
         <div class="col-lg-2">
             <h3>Dimensoes</h3>
             <% _.each(columns, function(column, index) { %>
-            <% if (["long", "integer", "Decimal"].indexOf(datatypes[index]) == -1) { %>
+            <% if (["long", "integer", "Decimal", "int"].indexOf(datatypes[index]) == -1) { %>
             <button id="btn-tabela" class="btn btn-block btn-primary"><%= column %></button>
             <% }%>
             <% }); %>
             <h3>Metricas</h3>
             <% _.each(columns, function(column, index) { %>
-            <% if (["long", "integer", "Decimal"].indexOf(datatypes[index]) != -1 ) { %>
+            <% if (["long", "integer", "Decimal", "int"].indexOf(datatypes[index]) != -1 ) { %>
             <button id="btn-tabela" class="btn btn-block btn-primary"><%= column %></button>
             <% }%>
             <% }); %>
             <h3>Graficos</h3>
             <div>
-                <button onclick="drawChart('AreaChart');" id="btn-chart-column-bar" class="btn btn-block btn-primary">Area</button>
-                <button onclick="drawChart('BarChart');" id="btn-chart-bar" class="btn btn-block btn-primary">Barras</button>
-                <button onclick="drawChart('ColumnChart');" id="btn-chart-bar" class="btn btn-block btn-primary">Coluna</button>
-                <button onclick="drawChart('LineChart');" id="btn-chart-area" class="btn btn-block btn-primary">Linha</button>
-                <button onclick="drawChart('PieChart');" id="btn-chart-line" class="btn btn-block btn-primary">Pizza</button>
-                <button onclick="drawChart('SteppedAreaChart');" id="btn-chart-pie" class="btn btn-block btn-primary">Stepped</button>
-                <button onclick="drawChart('PieChart');" data-option="{'pieHole': 0.4}" id="btn-chart-donut" class="btn btn-block btn-primary">Dunot</button>
-                <button onclick="drawChart('Gauge');" id="btn-chart-gauge" class="btn btn-block btn-primary">Gauge</button>
+                <button onclick="f_drawChart('AreaChart');" id="btn-chart-column-bar" class="btn btn-block btn-primary">Area</button>
+                <button onclick="f_drawChart('BarChart');" id="btn-chart-bar" class="btn btn-block btn-primary">Barras</button>
+                <button onclick="f_drawChart('ColumnChart');" id="btn-chart-bar" class="btn btn-block btn-primary">Coluna</button>
+                <button onclick="f_drawChart('LineChart');" id="btn-chart-area" class="btn btn-block btn-primary">Linha</button>
+                <button onclick="f_drawChart('PieChart');" id="btn-chart-line" class="btn btn-block btn-primary">Pizza</button>
+                <button onclick="f_drawChart('SteppedAreaChart');" id="btn-chart-pie" class="btn btn-block btn-primary">Stepped</button>
+                <button onclick="f_drawChart('PieChart');" data-option="{'pieHole': 0.4}" id="btn-chart-donut" class="btn btn-block btn-primary">Dunot</button>
+                <button onclick="f_drawChart('Gauge');" id="btn-chart-gauge" class="btn btn-block btn-primary">Gauge</button>
             </div>
         </div>
         <div class="col-lg-10">
+            <div id="mensagem" class="alert alert-warning" style="display: none" role="alert">
+                =D
+            </div>
             <div id="chart_div" class="btn-block"></div>
             <div id="table_div"></div>
         </div>
@@ -272,7 +305,6 @@ django.jQuery(function(){
 
 
     function btnTableChart(){
-        console.log("oioi");
         $('#chart_div').toggle();
         $('#table_div').toggle();
     };

@@ -30,11 +30,13 @@ function drawChart(data) {
         vAxis: {title: data.chart.vAxis, minValue: 0}
     };
 
-    var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+    var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
     var table = new google.visualization.Table(document.getElementById('table_div'));
 
     chart.draw(dataChart, options);
-    table.draw(dataChart, {showRowNumber: true});
+    table.draw(dataChart, {'showRowNumber': false, 'alternatingRowStyle': true, 'page': 'enable', 'pageSize': 10});
+    //Force table bootstrap in Google Table
+    $('.google-visualization-table-table').addClass('table')
 }
 
 function convert_to_unicode(data){
@@ -57,7 +59,7 @@ function convert_to_date(data){
     return data;
 };
 
-function printData(data) {
+function loadData(data) {
     var loading_bar = django.jQuery('#loading_bar');
     var run_button = django.jQuery('#id_run');
     var result = django.jQuery('#result');
@@ -103,11 +105,12 @@ django.jQuery(function(){
             dataType : 'json',
             data : django.jQuery("#run_form").serialize(),
             success : function(data){
-                printData(data);
+                loadData(data);
             },
             error : function(data){
+                console.log(data)
                 var template = _.template(django.jQuery('#message-response').html());
-                result.html(template({message:'error 500'}));
+                result.html(template({message:'error ('+data.status+') - '+data.response.split("\n").join("<br />")}));
                 run_button.attr("disabled", false);
                 loading_bar.fadeOut('slow');
             }

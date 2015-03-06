@@ -51,7 +51,7 @@ def run_query(request, query_id):
                 'template' : '#table-response',
                 'columns' : columns,
                 'lines' : lines,
-                'types': {col:type(line[i]) for i, col in enumarate(columns)}
+                'types': {col:type(line[i]) for i, col in enumerate(columns)}
             }
         else:
             response = {

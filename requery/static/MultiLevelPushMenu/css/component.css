@@ -43,10 +43,8 @@ html, body, .container, .scroller {
 }
 
 .mp-pusher {
-	position: relative;
-	left: 0;
-	height: 100%;
-    margin-top: 12%;
+    float: left;
+    width: 100%;
 }
 
 .mp-menu {

@@ -1,7 +1,5 @@
 # coding=utf-8
 # Create your views here.
-import json
-import six
 from django.conf import settings
 from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
@@ -9,20 +7,18 @@ from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.template.defaultfilters import safe
-if six.PY3:
-    from django.utils.encoding import force_text
-else:
-    from django.utils.encoding import force_unicode as force_text
+from django.utils.encoding import force_unicode
 from requery.forms import QueryForm
 from requery.models import Query
 from django.db import connections
+from django.utils import simplejson
 
 
 def form_query(request, query_id):
     query = Query.objects.get(id=query_id)
     form = QueryForm(initial={'text':query.text}, query=query)
     context = {
-        'title': 'Run Query %s on database %s' % (force_text(query.name), query.database),
+        'title': 'Run Query %s on database %s' % (force_unicode(query.name), query.database),
         'form': form,
         'object_id': query_id,
         'original': query,
@@ -49,13 +45,20 @@ def run_query(request, query_id):
         cursor.execute(text, params)
         lines = []
         for line in cursor.fetchall():
-            lines.append([six.text_type(tup) for tup in line])
+            last_line = line
+            lines.append([unicode(tup) for tup in line])
+
+        data_types = []
+        for item in last_line:
+            data_types.append(item.__class__.__name__)
 
         if lines :
+            columns = [col[0] for col in cursor.description]
             response = {
-                'template': '#table-response',
-                'columns': [col[0] for col in cursor.description],
-                'lines': lines
+                'template' : '#table-response',
+                'columns' : columns,
+                'lines' : lines,
+                'datatypes': data_types,
             }
         else:
             response = {
@@ -66,12 +69,12 @@ def run_query(request, query_id):
         LogEntry(user=request.user,
                  content_type=ContentType.objects.get_for_model(query),
                  object_id=query.id,
-                 object_repr=force_text(query),
+                 object_repr=force_unicode(query),
                  change_message="run with %s" % ', '.join(['%s:%s' % (key, value)
                                                  for key, value in request.POST.items()
                                                  if key != 'csrfmiddlewaretoken']),
                  action_flag=2 #change
         ).save()
-        return HttpResponse(json.dumps(response), content_type="application/json")
+        return HttpResponse(simplejson.dumps(response), mimetype='application/json')
 
     return HttpResponseForbidden()

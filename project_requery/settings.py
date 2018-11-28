@@ -12,35 +12,6 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-# BANCO_CAVEIRAO = {
-#     'ENGINE': 'django.db.backends.mysql', 'PORT': '3306',
-#     'USER': 'implantacao', 'PASSWORD': 'KTTYQea6', 'HOST': '192.168.1.105',
-# }
-# BASE_SIEVE = dict({'NAME' : 'sieve'}, **BANCO_CAVEIRAO)
-#
-# BANCO_ORACULO = {
-#     'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#     'HOST': 'db0.sieve.com.br',
-#     'USER': 'usr_jleite',
-#     'PASSWORD': 'sievera',
-#     'OPTIONS': {'autocommit': True, }
-# }
-#
-# DATABASES = {
-#     'default': dict({'NAME' : 'django_control'}, **BANCO_CAVEIRAO),
-#     'manager': dict({'NAME' : 'webetl_manager'}, **BANCO_CAVEIRAO),
-#     'portal':BASE_SIEVE,
-#     'api_portal':BASE_SIEVE,
-#     'crm': BASE_SIEVE,
-#     'operation': BASE_SIEVE,
-#     'finance': BASE_SIEVE,
-#     # 'matching': dict({'NAME' : 'matching_prod'}, **BANCO_CAVEIRAO),
-#     'jobs': dict({'NAME' : 'sievejobs'}, **BANCO_CAVEIRAO),
-#     'baseproduto': dict({'NAME' : 'baseproduto'}, **BANCO_CAVEIRAO),
-#     'buscadescontos': dict({'NAME': 'buscadescontos'}, **BANCO_CAVEIRAO),
-#     'matching': dict({'NAME': 'matching'}, **BANCO_ORACULO)
-# }
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.

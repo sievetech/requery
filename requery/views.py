@@ -13,6 +13,7 @@ from requery.models import Query
 from django.db import connections
 from django.utils import simplejson
 
+
 def form_query(request, query_id):
     query = Query.objects.get(id=query_id)
     form = QueryForm(initial={'text':query.text}, query=query)
@@ -30,6 +31,7 @@ def form_query(request, query_id):
         'change': False,
         }
     return render_to_response('requery/query.html', context, context_instance=RequestContext(request))
+
 
 def run_query(request, query_id):
     query = Query.objects.get(id=query_id)

@@ -1,5 +1,7 @@
 # coding=utf-8
 # Create your views here.
+from ast import literal_eval
+
 from django.conf import settings
 from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
@@ -39,7 +41,11 @@ def run_query(request, query_id):
         text = query.prepare_text()
         params = []
         for param in query.dicovery_params():
-            params.append(request.POST[param])
+            param_value = request.POST[param]
+            try:
+                params.append(literal_eval(param_value))
+            except ValueError:
+                params.append(param_value)
 
         cursor = connections[query.database].cursor()
         cursor.execute(text, params)

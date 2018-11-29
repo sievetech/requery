@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='requery',
-    version='0.4.0.0',
+    version='0.4.1.0',
     url='http://github.com/ebertti/requery/',
     author='Ezequiel Bertti',
     author_email='ebertti@gmail.com',

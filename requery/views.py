@@ -52,12 +52,11 @@ def run_query(request, query_id):
 
         lines = []
         for line in cursor.fetchall():
-            last_line = line
             lines.append([unicode(tup) for tup in line])
 
         if lines:
             data_types = []
-            for item in last_line:
+            for item in lines[-1]:
                 data_types.append(item.__class__.__name__)
 
             columns = [col[0] for col in cursor.description]

@@ -49,38 +49,41 @@ def run_query(request, query_id):
 
         cursor = connections[query.database].cursor()
         cursor.execute(text, params)
+
         lines = []
         for line in cursor.fetchall():
             last_line = line
             lines.append([unicode(tup) for tup in line])
 
-        data_types = []
-        for item in last_line:
-            data_types.append(item.__class__.__name__)
+        if lines:
+            data_types = []
+            for item in last_line:
+                data_types.append(item.__class__.__name__)
 
-        if lines :
             columns = [col[0] for col in cursor.description]
             response = {
-                'template' : '#table-response',
-                'columns' : columns,
-                'lines' : lines,
+                'template': '#table-response',
+                'columns': columns,
+                'lines': lines,
                 'datatypes': data_types,
             }
         else:
             response = {
-                'template' : '#message-response',
-                'message' : 'No data'
+                'template': '#message-response',
+                'message': 'No data'
             }
         cursor.close()
         LogEntry(user=request.user,
                  content_type=ContentType.objects.get_for_model(query),
                  object_id=query.id,
                  object_repr=force_unicode(query),
-                 change_message="run with %s" % ', '.join(['%s:%s' % (key, value)
-                                                 for key, value in request.POST.items()
-                                                 if key != 'csrfmiddlewaretoken']),
-                 action_flag=2 #change
-        ).save()
-        return HttpResponse(simplejson.dumps(response), mimetype='application/json')
+                 change_message="run with %s" % ', '.join(
+                     ['%s:%s' % (key, value)
+                      for key, value in request.POST.items()
+                      if key != 'csrfmiddlewaretoken']),
+                 action_flag=2  # change
+                 ).save()
+        return HttpResponse(simplejson.dumps(response),
+                            mimetype='application/json')
 
     return HttpResponseForbidden()

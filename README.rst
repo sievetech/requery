@@ -59,3 +59,7 @@ Changelog
 * 0.3.5.1
 
   * Working on Python 3 - `@tomatohater <https://github.com/tomatohater>`_
+
+* 0.4.1.0
+
+  * Allow receive list parameter

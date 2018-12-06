@@ -1,9 +1,9 @@
 # -*- coding:utf-8 -*-
-from setuptools import setup, find_packages
+from setuptools import setup
 
 setup(
     name='requery',
-    version='0.4.1.0',
+    version='0.4.1.1',
     url='http://github.com/ebertti/requery/',
     author='Ezequiel Bertti',
     author_email='ebertti@gmail.com',

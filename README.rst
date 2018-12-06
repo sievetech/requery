@@ -62,4 +62,8 @@ Changelog
 
 * 0.4.1.0
 
-  * Allow receive list parameter
+  * Allow receive list parameter as arguments for query
+
+* 0.4.1.1
+
+  * Fix reverse url in template
